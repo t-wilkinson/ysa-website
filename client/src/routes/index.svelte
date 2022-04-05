@@ -2,4 +2,14 @@
     import Calendar from "$lib/Calendar/index.svelte"
 </script>
 
-<Calendar />
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
+
+<div class="container">
+    <Calendar />
+</div>

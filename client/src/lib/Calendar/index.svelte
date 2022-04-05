@@ -1,9 +1,10 @@
-<script context="module" lang="ts">
-    import Day from "./Day.svelte"
-
-    let selectedDate = new Date()
-
-    function getCalendar(month: number, year: number) {
+<script lang="ts" context="module">
+    type Calendar = {
+        previousMonthDays: number[];
+        currentMonthDays: number[];
+        nextMonthDays: number[];
+    };
+    function getCalendar(month: number, year: number): Calendar {
         const previousMonth = new Date(year, month, 0)
         const currentMonth = new Date(year, month + 1, 0)
         const nextMonth = new Date(year, month + 1, 1)
@@ -28,9 +29,18 @@
 
         return {previousMonthDays, currentMonthDays, nextMonthDays}
     }
+</script>
 
-    const today = new Date()
-    const calendar = getCalendar(today.getFullYear(), today.getMonth())
+<script lang="ts">
+    import Day from "./Day.svelte"
+    import Events from "$lib/Events/index.svelte"
+    import { getEvents } from "$lib/Events/api.js"
+    import { selectedDate } from './stores.js'
+
+    let calendar: Calendar
+    $: {
+        calendar = getCalendar($selectedDate.year, $selectedDate.month)
+    }
 </script>
 
 <style>
@@ -38,9 +48,13 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: min-content;
     }
 
     .month {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
         font-weight: bold;
         font-size: 2em;
     }
@@ -69,7 +83,9 @@
 
 <div class="calendar">
     <div class="month">
-        {today.toLocaleString("en-US", {month: "long"})} {today.getFullYear()}
+        <button on:click={() => selectedDate.decMonth()}>&lt;</button>
+        {new Date($selectedDate.year, $selectedDate.month, $selectedDate.day).toLocaleString("en-US", {month: "long"})} {$selectedDate.year}
+        <button on:click={() => selectedDate.incMonth()}>&gt;</button>
     </div>
 
     <div class="week-days">
@@ -79,7 +95,6 @@
             </div>
         {/each}
     </div>
-
 
     <div class="days">
         {#each calendar.previousMonthDays as day}
@@ -94,4 +109,12 @@
             <Day type="next" {day} />
         {/each}
     </div>
+
+    {#await getEvents($selectedDate)}
+        loading...
+    {:then events}
+        <Events {events} />
+    {:catch error}
+        {error}
+    {/await}
 </div>
