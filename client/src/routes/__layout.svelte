@@ -1,5 +1,10 @@
 <script>
 	import '../app.css';
+
+    const routes = [
+        { label: 'Home', href: '/' },
+        { label: 'Events', href: '/events' },
+    ]
 </script>
 
 <style>
@@ -14,10 +19,21 @@
         margin: 0;
         padding: 0;
     }
+
+    ul {
+        display: flex;
+        gap: 1rem;
+    }
 </style>
 
 <nav>
-Home
+    <ul>
+        {#each routes as route}
+            <li>
+                <a href={route.href}>{route.label}</a>
+            </li>
+        {/each}
+    </ul>
 </nav>
 
 <slot />

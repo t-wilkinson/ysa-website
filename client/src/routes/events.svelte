@@ -11,5 +11,5 @@
 </style>
 
 <div class="container">
-    Home
+    <Calendar />
 </div>

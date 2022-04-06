@@ -34,12 +34,18 @@
 <script lang="ts">
     import Day from "./Day.svelte"
     import Events from "$lib/Events/index.svelte"
-    import { getEvents } from "$lib/Events/api.js"
+    import { getEvents, getEventDays } from "$lib/Events/api.js"
     import { selectedDate } from './stores.js'
 
     let calendar: Calendar
     $: {
         calendar = getCalendar($selectedDate.year, $selectedDate.month)
+    }
+
+    let eventDays = []
+    $: {
+        getEventDays($selectedDate)
+            .then(days => eventDays = days)
     }
 </script>
 
@@ -102,7 +108,9 @@
         {/each}
 
         {#each calendar.currentMonthDays as day}
-            <Day type="current" {day} selectedDate={selectedDate} />
+            <Day type="current" {day} selectedDate={selectedDate}
+                 {eventDays}
+        />
         {/each}
 
         {#each calendar.nextMonthDays as day}
@@ -117,4 +125,5 @@
     {:catch error}
         {error}
     {/await}
+
 </div>
