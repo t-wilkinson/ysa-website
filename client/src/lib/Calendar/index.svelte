@@ -4,16 +4,11 @@
         currentMonthDays: number[];
         nextMonthDays: number[];
     };
+
     function getCalendar(month: number, year: number): Calendar {
         const previousMonth = new Date(year, month, 0)
         const currentMonth = new Date(year, month + 1, 0)
         const nextMonth = new Date(year, month + 1, 1)
-
-        // Get days in previous month
-        const previousMonthDays = []
-        for (let i = 1; i <= previousMonth.getDay() + 1; i++) {
-            previousMonthDays.push(i + previousMonth.getDate() - 6 + 1 + previousMonth.getDay())
-        }
 
         // Get days in current month
         const currentMonthDays = []
@@ -21,10 +16,26 @@
             currentMonthDays.push(i)
         }
 
+        // Get days in previous month
+        const previousMonthDays = []
+        if (previousMonth.getDay() !== 6) {
+            for (let i = 0; i <= previousMonth.getDay(); i++) {
+                previousMonthDays.push(i + previousMonth.getDate() - previousMonth.getDay())
+            }
+        }
+
         // Get days in next month
         const nextMonthDays = []
         for (let i = 1; i <= 7 - nextMonth.getDay(); i++) {
             nextMonthDays.push(i)
+        }
+
+        // If we do not fill a 6x7 grid of days, add another week at the end of the calendar
+        const fillsCalendar = (previousMonthDays.length + currentMonthDays.length + nextMonthDays.length) >= 6 * 7
+        if (!fillsCalendar) {
+            for (let i = 1; i <= 7; i++) {
+                nextMonthDays.push(i + 7- nextMonth.getDay())
+            }
         }
 
         return {previousMonthDays, currentMonthDays, nextMonthDays}
@@ -39,7 +50,7 @@
 
     let calendar: Calendar
     $: {
-        calendar = getCalendar($selectedDate.year, $selectedDate.month)
+        calendar = getCalendar($selectedDate.month, $selectedDate.year)
     }
 
     let eventDays = []

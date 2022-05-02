@@ -4,7 +4,8 @@
   "info": {
     "singularName": "event",
     "pluralName": "events",
-    "displayName": "Event"
+    "displayName": "Event",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -24,14 +25,26 @@
       "type": "text"
     },
     "pictures": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
+      ]
+    },
+    "repeating": {
+      "type": "enumeration",
+      "enum": [
+        "onetime",
+        "daily",
+        "weekly",
+        "biweekly",
+        "monthly"
       ],
-      "type": "media",
-      "multiple": true
+      "default": "onetime"
     }
   }
 }

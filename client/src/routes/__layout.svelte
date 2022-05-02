@@ -13,6 +13,8 @@
         padding: 1rem;
         background: #ccc;
         margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
     }
 
     :global(body) {
@@ -33,6 +35,10 @@
                 <a href={route.href}>{route.label}</a>
             </li>
         {/each}
+    </ul>
+    <ul>
+        <a href="/login">Login</a>
+        <a href="/logout">Logout</a>
     </ul>
 </nav>
 

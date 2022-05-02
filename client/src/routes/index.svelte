@@ -11,5 +11,15 @@
 </style>
 
 <div class="container">
-    Home
+    <ul>
+        <li>
+            Baptisims
+        </li>
+        <li>Temple trip</li>
+        <li>Talent show</li>
+        <li>etc.</li>
+    </ul>
+
+    <h2>Events</h2>
+    <span>Here you can see all the events that apply to a user</span>
 </div>
